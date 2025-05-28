@@ -9,7 +9,7 @@ class DataLoader:
 
     def load_sells_data_from_file(self, path):
         self.sellsData = pd.read_csv(path, sep=';', header=None)
-        self.sellsData.columns = ['KodProduktu', 'Klient', '0', '1', '2', '3',
+        self.sellsData.columns = ['KodProduktu', 'JM', 'Klient', '0', '1', '2', '3',
                                   '4', '5', '6', '7', '8', '9', '10', '11',
                                   '12', '13', '14', '15', '16', '17', '18',
                                   '19', '20', '21', '22', '23', '24', '25',
@@ -23,12 +23,12 @@ class DataLoader:
                                   '75', '76', '77', '78', '79', '80', '81',
                                   '82', '83', '84', '85', '86', '87', '88',
                                   '89', '90', '91', '92', '93', '94', '95',
-                                  '96', '97', 'SredniaCena']
+                                  '96', '97']
 
     def prepare_sells_data(self):
-        cols_to_drop = [self.sellsData.columns[-1]]
+        cols_to_drop = [self.sellsData.columns[1], self.sellsData.columns[3]]
         self.sellsData = self.sellsData.drop(cols_to_drop, axis=1)
-        cols_to_reverse = [str(i) for i in range(1, 98)]
+        cols_to_reverse = [str(i) for i in range(1, 97)]
         cols_present = [
             col for col in cols_to_reverse if col in self.sellsData.columns]
         cols_reversed = list(reversed(cols_present))
