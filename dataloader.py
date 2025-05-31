@@ -5,7 +5,7 @@ import numpy as np
 class DataLoader:
     def __init__(self):
         self.sellsData = pd.DataFrame
-        self.bomData = pd.DataFrame
+        self.productsList = []
 
     def load_sells_data_from_file(self, path):
         self.sellsData = pd.read_csv(path, sep=';', header=None)
@@ -32,11 +32,17 @@ class DataLoader:
         cols_present = [
             col for col in cols_to_reverse if col in self.sellsData.columns]
         cols_reversed = list(reversed(cols_present))
-        other_cols = [col for col in self.sellsData.columns if col not in cols_present]
+        other_cols = [
+            col for col in self.sellsData.columns if col not in cols_present]
         new_order = other_cols[:2] + cols_reversed
         self.sellsData = self.sellsData[new_order]
+        
+        
+        #self.sellsData = self.sellsData[self.sellsData['KodProduktu'].astype(str).str.startswith('3')]
 
         return self.sellsData
 
-    def load_bom_data_from_file(self, path):
-        self.bomData = pd.read_csv(path, sep=';', header=None)
+    def prepare_products_list(self, path):
+        uniquelist = self.sellsData['KodProdutku'].unique().tolist()
+        self.producsList = uniquelist
+        return self.productsList
