@@ -1,23 +1,31 @@
 from dataloader import DataLoader
 from predictor import Predictor
-import pandas as pd
-import numpy as np
-import xgboost as xgb
 
-
+# 1. Wczytaj dane
 loader = DataLoader()
-
 loader.load_sells_data_from_file('sprzedaz.csv')
-df = loader.prepare_sells_data()
-productslist = loader.prepare_products_list()
+loader.prepare_sells_data()
+loader.prepare_products_list()
 
-X, y, df_lags, le = loader.prepare_training_data()
+# 2. Przygotuj dane treningowe
+df_lags, X, y = loader.prepare_training_data()
 
-
-predictor = Predictor(le=le)
-
+# 3. Trening modelu
+predictor = Predictor()
 predictor.model_train(X, y)
 
-predictor.forecasting('0001', df_lags)
-predictor.forecasting('0015', df_lags)
-predictor.forecasting('0017', df_lags)
+while True:
+    product_code = input("Podaj kod produktu do prognozy (lub wpisz 'exit' aby zakończyć): ").strip()
+    
+    if product_code.lower() == 'exit':
+        print("Zakończono prognozowanie.")
+        break
+
+    if product_code not in loader.productsList:
+        print("❌ Nieprawidłowy kod produktu lub brak danych. Spróbuj ponownie.")
+        continue
+
+    try:
+        predictor.forecasting(product_code, df_lags, loader.le)
+    except Exception as e:
+        print(f"Błąd podczas prognozy: {e}")
