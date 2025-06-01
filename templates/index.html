@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Prognoza sprzedaży</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Prognoza sprzedaży</h1>
+  <form method="POST">
+    <label for="product_code">Wpisz lub wybierz produkt:</label>
+    <input list="produkty" name="product_code" value="{{ product or '' }}">
+    <datalist id="produkty">
+      {% for code in products %}
+      <option value="{{ code }}">
+      {% endfor %}
+    </datalist>
+    <button type="submit">Prognozuj</button>
+  </form>
+    <div id="forecast-text" style="margin-top:10px; white-space: pre-line; font-family: monospace;">
+        {{ forecast_text or '' }}
+    </div>    
+  <p style="color: red;">{{ message }}</p>
+
+  {% if history and forecast %}
+  <canvas id="salesChart" width="800" height="400"></canvas>
+  <script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    const historyData = {{ history | tojson }};
+    const forecastData = {{ forecast | tojson }};
+
+    const labels = [];
+    const histLen = historyData.length;
+    const futLen = forecastData.length;
+
+    for(let i = -histLen + 1; i <= 0; i++) {
+      labels.push(i.toString());
+    }
+    for(let i = 1; i <= futLen; i++) {
+      labels.push(i.toString());
+    }
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Historyczna sprzedaż',
+            data: historyData,
+            borderColor: 'blue',
+            fill: false,
+            tension: 0.1,
+            pointRadius: 3,
+          },
+          {
+            label: 'Prognoza',
+            data: Array(histLen).fill(null).concat(forecastData),
+            borderColor: 'red',
+            borderDash: [5, 5],
+            fill: false,
+            tension: 0.1,
+            pointRadius: 3,
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Miesiące (0 = teraz, ujemne = przeszłość, dodatnie = przyszłość)"
+            }
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Wielkość sprzedaży"
+            }
+          }
+        }
+      }
+    });
+  </script>
+  {% endif %}
+</body>
+</html>
