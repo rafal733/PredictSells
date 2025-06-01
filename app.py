@@ -13,6 +13,7 @@ df_lags, X, y = loader.prepare_training_data()
 predictor = Predictor()
 predictor.model_train(X, y)
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     products = loader.productsList
@@ -49,6 +50,7 @@ def index():
         forecast=forecast,
         forecast_text=forecast_text
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

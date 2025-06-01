@@ -55,6 +55,8 @@ class Predictor:
             lag_features = last_values[-36:]
             rolling_mean_3 = pd.Series(last_values[-3:]).mean()
             rolling_mean_6 = pd.Series(last_values[-6:]).mean()
+            trend_24 = last_values[-1] - last_values[-25] if len(last_values) >= 25 else 0
+            trend_6 = last_values[-1] - last_values[-7] if len(last_values) >= 7 else 0            
             std_3 = pd.Series(last_values[-3:]).std()
             std_6 = pd.Series(last_values[-6:]).std()
             suma_rok_1 = sum(last_values[-12:])
@@ -63,6 +65,7 @@ class Predictor:
 
             x_input = lag_features + [
                 rolling_mean_3, rolling_mean_6,
+                trend_24, trend_6,
                 std_3, std_6,
                 suma_rok_1, suma_rok_2, suma_rok_3,
                 product_enc
@@ -120,6 +123,8 @@ class Predictor:
             lag_features = last_values[-36:]
             rolling_mean_3 = pd.Series(last_values[-3:]).mean()
             rolling_mean_6 = pd.Series(last_values[-6:]).mean()
+            trend_24 = last_values[-1] - last_values[-25] if len(last_values) >= 25 else 0
+            trend_6 = last_values[-1] - last_values[-7] if len(last_values) >= 7 else 0            
             std_3 = pd.Series(last_values[-3:]).std()
             std_6 = pd.Series(last_values[-6:]).std()
             suma_rok_1 = sum(last_values[-12:])
@@ -128,6 +133,7 @@ class Predictor:
 
             x_input = lag_features + [
                 rolling_mean_3, rolling_mean_6,
+                trend_24, trend_6,
                 std_3, std_6,
                 suma_rok_1, suma_rok_2, suma_rok_3,
                 product_enc
