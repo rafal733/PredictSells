@@ -47,8 +47,8 @@ class DataLoader:
         # Cechy dodatkowe
         df_long["rolling_mean_3"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(3).mean())
         df_long["rolling_mean_6"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(6).mean())
-        df_long["trend_24"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.diff(24))
-        df_long["trend_6"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.diff(6))
+        df_long["trend_24"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.diff().rolling(24).mean())
+        df_long["trend_6"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.diff().rolling(6).mean())
         df_long["std_3"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(3).std())        
         df_long["std_6"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(6).std())
 
