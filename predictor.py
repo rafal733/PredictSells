@@ -1,6 +1,7 @@
 import pandas as pd
 import xgboost as xgb
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import numpy as np
 
 
@@ -15,6 +16,17 @@ class Predictor:
 
     def model_train(self, X, y):
         self.model.fit(X, y)
+
+    def evaluate_model(self, X_test, y_test):
+        predictions = self.model.predict(X_test)
+        rmse = np.sqrt(mean_squared_error(y_test, predictions))
+        mae = mean_absolute_error(y_test, predictions)
+        r2 = r2_score(y_test, predictions)
+        print("--- Ocena Modelu ---")
+        print(f"RMSE: {rmse:.2f}")
+        print(f"MAE: {mae:.2f}")
+        print(f"R^2: {r2:.2f}")
+        return rmse, mae, r2
 
     def forecasting(self, product, df_lags, le):
         if product not in le.classes_:

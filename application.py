@@ -1,5 +1,6 @@
 from dataloader import DataLoader
 from predictor import Predictor
+from sklearn.model_selection import train_test_split
 
 # 1. Wczytaj dane
 loader = DataLoader()
@@ -10,9 +11,13 @@ loader.prepare_products_list()
 # 2. Przygotuj dane treningowe
 df_lags, X, y = loader.prepare_training_data()
 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42, shuffle=False)
+
 # 3. Trening modelu
 predictor = Predictor()
 predictor.model_train(X, y)
+
+predictor.evaluate_model(X_test, y_test)
 
 while True:
     product_code = input(
