@@ -13,6 +13,7 @@ class Predictor:
             learning_rate=learning_rate,
             random_state=random_state
         )
+        print("n_estimators=", n_estimators, "max_depth=", max_depth, "learning_rate=", learning_rate, "random_state=", random_state)
 
     def model_train(self, X, y):
         self.model.fit(X, y)

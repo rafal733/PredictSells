@@ -10,7 +10,7 @@ loader.prepare_sells_data()
 loader.prepare_products_list()
 df_lags, X, y = loader.prepare_training_data()
 
-predictor = Predictor(n_estimators=300, max_depth=8, learning_rate=0.03, random_state=42)
+predictor = Predictor(n_estimators=300, max_depth=8, learning_rate=0.3, random_state=42)
 predictor.model_train(X, y)
 
 

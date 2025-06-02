@@ -11,10 +11,10 @@ loader.prepare_products_list()
 # 2. Przygotuj dane treningowe
 df_lags, X, y = loader.prepare_training_data()
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42, shuffle=False)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, shuffle=False)
 
 # 3. Trening modelu
-predictor = Predictor()
+predictor = Predictor(n_estimators=500, max_depth=8, learning_rate=0.03, random_state=42)
 predictor.model_train(X, y)
 
 predictor.evaluate_model(X_test, y_test)
