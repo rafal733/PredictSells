@@ -24,9 +24,10 @@ class Predictor:
         mae = mean_absolute_error(y_test, predictions)
         r2 = r2_score(y_test, predictions)
         print("--- Ocena Modelu ---")
-        print(f"RMSE: {rmse:.2f}")
-        print(f"MAE: {mae:.2f}")
-        print(f"R^2: {r2:.2f}")
+        print(f"RMSE: {rmse:.4f}")
+        print(f"MAE: {mae:.4f}")
+        print(f"R^2: {r2:.4f}")
+        print("--------------------")
         return rmse, mae, r2
 
     def forecasting(self, product, df_lags, le):

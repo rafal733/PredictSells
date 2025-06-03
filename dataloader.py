@@ -10,7 +10,7 @@ class DataLoader:
         self.le = LabelEncoder()
 
     def load_sells_data_from_file(self, path):
-        self.sellsData = pd.read_csv(path, sep=';', header=None)
+        self.sellsData = pd.read_csv(path, sep=';', header=None, low_memory=False)
         self.sellsData.columns = ['KodProduktu', 'JM', 'Klient'] + [str(i) for i in range(0, 98)]
 
     def prepare_sells_data(self):
@@ -45,14 +45,12 @@ class DataLoader:
         for lag in lags:
             df_long[f"lag_{lag}"] = df_long.groupby("KodProduktu")["sprzedaz"].shift(lag)
 
-        # Cechy dodatkowe
         df_long["rolling_mean_3"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(3).mean())
         df_long["rolling_mean_6"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(6).mean())
         df_long["trend_24"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.diff().rolling(24).mean())
         df_long["trend_6"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.diff().rolling(6).mean())
         df_long["std_3"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(3).std())        
         df_long["std_6"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(lambda x: x.rolling(6).std())
-        
 
         for i in range(1, 4):
             df_long[f"sum_year_{i}"] = df_long.groupby("KodProduktu")["sprzedaz"].transform(

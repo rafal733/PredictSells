@@ -13,7 +13,6 @@ df_lags, X, y = loader.prepare_training_data()
 predictor = Predictor(n_estimators=300, max_depth=8, learning_rate=0.3, random_state=42)
 predictor.model_train(X, y)
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     products = loader.productsList
@@ -30,11 +29,9 @@ def index():
         else:
             history, forecast, message = predictor.forecasting_www(product, df_lags, loader.le)
 
-            # Konwersja typów do float - ważne dla JSON serializacji
             history = [float(x) for x in history] if history else []
             forecast = [float(x) for x in forecast] if forecast else []
 
-            # Generujemy tekst z prognozą
             forecast_lines = [
                 f"Prognozowana sprzedaż produktu {product} za miesiąc {i+1} od teraz: {pred:.2f}"
                 for i, pred in enumerate(forecast)
