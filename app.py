@@ -5,13 +5,14 @@ from predictor import Predictor
 app = Flask(__name__)
 
 loader = DataLoader()
-loader.load_sells_data_from_file("sprzedaz.csv")
+loader.load_sells_data_from_file("PredictSells/sprzedaz.csv")
 loader.prepare_sells_data()
 loader.prepare_products_list()
 df_lags, X, y = loader.prepare_training_data()
 
 predictor = Predictor(n_estimators=300, max_depth=8, learning_rate=0.3, random_state=42)
 predictor.model_train(X, y)
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -27,7 +28,9 @@ def index():
         if product not in products:
             message = "❌ Nieprawidłowy kod produktu lub brak danych."
         else:
-            history, forecast, message = predictor.forecasting_www(product, df_lags, loader.le)
+            history, forecast, message = predictor.forecasting_www(
+                product, df_lags, loader.le
+            )
 
             history = [float(x) for x in history] if history else []
             forecast = [float(x) for x in forecast] if forecast else []
@@ -45,7 +48,7 @@ def index():
         message=message,
         history=history,
         forecast=forecast,
-        forecast_text=forecast_text
+        forecast_text=forecast_text,
     )
 
 

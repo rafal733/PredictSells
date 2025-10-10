@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Projekt/Python"
+		},
+		{
+			"path": "../BigData"
+		}
+	],
+	"settings": {}
+}
